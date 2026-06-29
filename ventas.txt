@@ -1,0 +1,15 @@
+REGISTRO DE VENTAS
+
+Fecha: 29/06/2026 16:26:06
+Restaurante: Pizza Point
+Modalidad: Para llevar
+Productos vendidos: 5
+Total vendido: $24000.0
+-----------------------------
+
+Fecha: 29/06/2026 16:34:22
+Restaurante: Pizza Point
+Modalidad: Comer en el local
+Productos vendidos: 2
+Total vendido: $1600
+-----------------------------
