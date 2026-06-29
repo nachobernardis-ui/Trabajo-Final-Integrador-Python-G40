@@ -1,16 +1,3 @@
-# --------------------------- DESCRIPCIÓN GENERAL ---------------------------
-# En esta sección se realiza la configuración inicial del programa.
-# Primero se importan los módulos necesarios para trabajar con fechas, horas
-# y archivos del sistema. Luego se definen constantes que almacenan valores
-# fijos, como el nombre del archivo de ventas, la cantidad mínima de productos
-# requerida para aplicar un descuento y el porcentaje de dicho descuento.
-# Finalmente, se carga la información de los restaurantes en una estructura
-# de datos compuesta por una lista de diccionarios, donde cada restaurante
-# contiene su nombre y un menú con productos, precios y toppings disponibles.
-# Esta información será utilizada posteriormente por las distintas funciones
-# del sistema para gestionar los pedidos y calcular los importes de cada venta.
-# --------------------------------------------------------------------------
-
 # Importación de módulos necesarios
 import datetime  # Permite guardar la fecha y hora de cada venta
 import os        # Permite verificar si existe el archivo de ventas
@@ -46,5 +33,4 @@ restaurantes = [
         ]
     }
 ]
-
-
+# Primer avance del proyecto
