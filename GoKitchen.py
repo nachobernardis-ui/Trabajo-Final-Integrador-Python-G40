@@ -76,3 +76,76 @@ def leer_cantidad():
             print("La cantidad debe ser mayor a 0.")
         except ValueError:
             print("Ingresá un número válido.")
+#### Hasta aca el Segundo avance del proyecto
+
+# Muestra los restaurantes disponibles y permite elegir uno
+def elegir_restaurante():
+    print("\nRestaurantes disponibles:")
+
+    for i, restaurante in enumerate(restaurantes, start=1):
+        print(f"{i}) {restaurante['nombre']}")
+
+    indice = leer_opcion("Seleccione un restaurante: ", len(restaurantes))
+    return indice, restaurantes[indice]
+
+
+# Permite elegir si el pedido es para comer en el local o para llevar
+def elegir_modalidad():
+    print("\nModalidad del pedido")
+    print("1) Comer en el local")
+    print("2) Para llevar")
+
+    opcion = leer_opcion("Seleccione una opción: ", 2)
+
+    if opcion == 0:
+        return "Comer en el local"
+
+    return "Para llevar"
+
+
+# Permite agregar toppings al producto elegido
+def elegir_toppings(toppings):
+    elegidos = []
+    respuesta = input("¿Desea agregar toppings? s/n: ").lower()
+
+    while respuesta == "s":
+        print("\nToppings disponibles:")
+
+        for i, (nombre, precio) in enumerate(toppings, start=1):
+            print(f"{i}) {nombre} - ${precio}")
+
+        indice = leer_opcion("Seleccione un topping: ", len(toppings))
+        elegidos.append(toppings[indice])  # Guarda el topping elegido
+
+        respuesta = input("¿Desea agregar otro topping? s/n: ").lower()
+
+    return elegidos
+
+
+# Permite seleccionar productos y armar el pedido completo
+def seleccionar_productos(restaurante):
+    pedido = []
+    seguir = "s"
+
+    while seguir == "s":
+        print(f"\nMenú de {restaurante['nombre']}:")
+
+        for i, (nombre, precio, toppings) in enumerate(restaurante["menu"], start=1):
+            print(f"{i}) {nombre} - ${precio}")
+
+        indice = leer_opcion("Seleccione un producto: ", len(restaurante["menu"]))
+
+        # Se desarma la tupla del producto elegido
+        nombre, precio, toppings = restaurante["menu"][indice]
+
+        pedido.append({
+            "producto": nombre,
+            "precio": precio,
+            "cantidad": leer_cantidad(),
+            "toppings": elegir_toppings(toppings)
+        })
+
+        seguir = input("¿Desea agregar otro producto? s/n: ").lower()
+
+    return pedido
+#### Hasta aca el Tercer avance del proyecto
