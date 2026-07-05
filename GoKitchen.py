@@ -317,3 +317,46 @@ def mostrar_estadisticas():
         print(f"Productos vendidos: {productos_restaurante[i]}")
         print(f"Total vendido: ${total_restaurante[i]}")
 #### Hasta aca el Cuarto avance del proyecto
+
+# Realiza todo el proceso de un pedido
+def realizar_pedido():
+    indice_restaurante = elegir_restaurante()
+    modalidad = elegir_modalidad()
+    pedido = seleccionar_productos(indice_restaurante)
+
+    total = calcular_total(pedido)
+    cantidad_productos = contar_productos(pedido)
+    descuento, total_final = aplicar_descuento(total, cantidad_productos)
+
+    registrar_venta(indice_restaurante, cantidad_productos, total_final)
+    guardar_venta(restaurantes[indice_restaurante], modalidad, cantidad_productos, total_final, descuento)
+    mostrar_resumen(restaurantes[indice_restaurante], modalidad, pedido, total, descuento, total_final)
+
+
+# Menú principal del programa
+def menu():
+    verificar_archivo()
+
+    while True:
+        print("""
+--- SISTEMA DE PEDIDOS DE COMIDA ---
+1. Realizar pedido
+2. Ver estadísticas de ventas
+3. Salir
+""")
+
+        opcion = input("Elegí una opción: ")
+
+        if opcion == "1":
+            realizar_pedido()
+        elif opcion == "2":
+            mostrar_estadisticas()
+        elif opcion == "3":
+            print("Programa finalizado.")
+            break
+        else:
+            print("Opción inválida.")
+
+# Ejecución del programa
+menu()
+#### Hasta aca el Quinto avance del proyecto
