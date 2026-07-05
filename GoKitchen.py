@@ -318,6 +318,19 @@ def mostrar_estadisticas():
         print(f"Total vendido: ${total_restaurante[i]}")
 #### Hasta aca el Cuarto avance del proyecto
 
+
+# Muestra el menú principal con formato visual
+def mostrar_menu_principal():
+    print("\n***********************************")
+    print("        TICKET - GO KITCHEN")
+    print("***********************************")
+    print("  Producto del sistema:")
+    print("  1) Realizar pedido")
+    print("  2) Ver estadísticas de ventas")
+    print("  3) Salir")
+    print("***********************************")
+
+
 # Realiza todo el proceso de un pedido
 def realizar_pedido():
     indice_restaurante = elegir_restaurante()
@@ -338,12 +351,7 @@ def menu():
     verificar_archivo()
 
     while True:
-        print("""
---- SISTEMA DE PEDIDOS DE COMIDA ---
-1. Realizar pedido
-2. Ver estadísticas de ventas
-3. Salir
-""")
+        mostrar_menu_principal()
 
         opcion = input("Elegí una opción: ")
 
