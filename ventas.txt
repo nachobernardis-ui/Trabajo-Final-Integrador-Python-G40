@@ -13,3 +13,11 @@ Modalidad: Comer en el local
 Productos vendidos: 2
 Total vendido: $1600
 -----------------------------
+
+Fecha: 05/07/2026 14:39:18
+Restaurante: Sushi Go
+Modalidad: Comer en el local
+Productos vendidos: 4
+Descuento aplicado: $2400.0
+Total vendido: $9600.0
+-----------------------------
