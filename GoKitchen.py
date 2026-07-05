@@ -9,44 +9,77 @@ CANTIDAD_MINIMA_DESCUENTO = 3
 PORCENTAJE_DESCUENTO = 0.20
 
 
-# Lista de restaurantes con sus productos y toppings
+# Lista de restaurantes disponibles
 restaurantes = [
-    {
-        "nombre": "Burger House",
-        "menu": [
-            ("Hamburguesa simple", 3500, [("Queso extra", 500), ("Panceta", 800)]),
-            ("Papas fritas", 2000, [("Cheddar", 700)])
-        ]
-    },
-    {
-        "nombre": "Pizza Point",
-        "menu": [
-            ("Pizza muzzarella", 6000, [("Jamón", 1000), ("Aceitunas", 500)]),
-            ("Empanadas", 800, [("Salsa picante", 200)])
-        ]
-    },
-    {
-        "nombre": "Sushi Go",
-        "menu": [
-            ("Combo sushi chico", 7000, [("Salsa soja extra", 300), ("Wasabi", 300)]),
-            ("Arrolladitos primavera", 3000, [("Salsa agridulce", 400)])
-        ]
-    }
+    "Burger House",
+    "Pizza Point",
+    "Sushi Go"
+]
+
+
+# Lista de productos de cada restaurante
+productos = [
+    ["Hamburguesa simple", "Papas fritas"],
+    ["Pizza muzzarella", "Empanadas"],
+    ["Combo sushi chico", "Arrolladitos primavera"]
+]
+
+
+# Lista de precios de cada producto
+precios = [
+    [3500, 2000],
+    [6000, 800],
+    [7000, 3000]
+]
+
+
+# Lista de toppings disponibles para cada producto
+toppings_nombres = [
+    [
+        ["Queso extra", "Panceta"],
+        ["Cheddar"]
+    ],
+    [
+        ["Jamón", "Aceitunas"],
+        ["Salsa picante"]
+    ],
+    [
+        ["Salsa soja extra", "Wasabi"],
+        ["Salsa agridulce"]
+    ]
+]
+
+
+# Lista de precios de los toppings
+toppings_precios = [
+    [
+        [500, 800],
+        [700]
+    ],
+    [
+        [1000, 500],
+        [200]
+    ],
+    [
+        [300, 300],
+        [400]
+    ]
 ]
 #### Hasta aca el Primer avance del proyecto
 
+
 # Estadísticas iniciales de ventas por restaurante
-estadisticas = [
-    {"restaurante": restaurante["nombre"], "pedidos": 0, "productos": 0, "total": 0}
-    for restaurante in restaurantes
-]
+pedidos_restaurante = [0, 0, 0]
+productos_restaurante = [0, 0, 0]
+total_restaurante = [0, 0, 0]
 
 
 # Crea el archivo de ventas si todavía no existe
 def verificar_archivo():
     if not os.path.exists(ARCHIVO_VENTAS):
-        with open(ARCHIVO_VENTAS, "w", encoding="utf-8") as archivo:
-            archivo.write("REGISTRO DE VENTAS\n")
+        archivo = open(ARCHIVO_VENTAS, "w", encoding="utf-8")
+        archivo.write("REGISTRO DE VENTAS\n")
+        archivo.close()
 
 
 # Obtiene la fecha y hora actual del sistema
@@ -59,8 +92,10 @@ def leer_opcion(mensaje, limite):
     while True:
         try:
             opcion = int(input(mensaje))
-            if 1 <= opcion <= limite:
+
+            if opcion >= 1 and opcion <= limite:
                 return opcion - 1  # Se resta 1 porque las listas empiezan en 0
+
             print("Opción inválida.")
         except ValueError:
             print("Ingresá un número válido.")
@@ -71,22 +106,36 @@ def leer_cantidad():
     while True:
         try:
             cantidad = int(input("Ingrese la cantidad: "))
+
             if cantidad > 0:
                 return cantidad
+
             print("La cantidad debe ser mayor a 0.")
         except ValueError:
             print("Ingresá un número válido.")
+
+
+# Lee una respuesta válida de sí o no
+def leer_respuesta(mensaje):
+    while True:
+        respuesta = input(mensaje).lower()
+
+        if respuesta == "s" or respuesta == "n":
+            return respuesta
+
+        print("Respuesta inválida. Ingresá s o n.")
 #### Hasta aca el Segundo avance del proyecto
+
 
 # Muestra los restaurantes disponibles y permite elegir uno
 def elegir_restaurante():
     print("\nRestaurantes disponibles:")
 
-    for i, restaurante in enumerate(restaurantes, start=1):
-        print(f"{i}) {restaurante['nombre']}")
+    for i in range(len(restaurantes)):
+        print(f"{i + 1}) {restaurantes[i]}")
 
     indice = leer_opcion("Seleccione un restaurante: ", len(restaurantes))
-    return indice, restaurantes[indice]
+    return indice
 
 
 # Permite elegir si el pedido es para comer en el local o para llevar
@@ -99,53 +148,172 @@ def elegir_modalidad():
 
     if opcion == 0:
         return "Comer en el local"
-
-    return "Para llevar"
+    else:
+        return "Para llevar"
 
 
 # Permite agregar toppings al producto elegido
-def elegir_toppings(toppings):
-    elegidos = []
-    respuesta = input("¿Desea agregar toppings? s/n: ").lower()
+def elegir_toppings(indice_restaurante, indice_producto):
+    toppings_elegidos = []
+    precios_elegidos = []
+
+    respuesta = leer_respuesta("¿Desea agregar toppings? s/n: ")
 
     while respuesta == "s":
         print("\nToppings disponibles:")
 
-        for i, (nombre, precio) in enumerate(toppings, start=1):
-            print(f"{i}) {nombre} - ${precio}")
+        cantidad_toppings = len(toppings_nombres[indice_restaurante][indice_producto])
 
-        indice = leer_opcion("Seleccione un topping: ", len(toppings))
-        elegidos.append(toppings[indice])  # Guarda el topping elegido
+        for i in range(cantidad_toppings):
+            nombre = toppings_nombres[indice_restaurante][indice_producto][i]
+            precio = toppings_precios[indice_restaurante][indice_producto][i]
+            print(f"{i + 1}) {nombre} - ${precio}")
 
-        respuesta = input("¿Desea agregar otro topping? s/n: ").lower()
+        indice_topping = leer_opcion("Seleccione un topping: ", cantidad_toppings)
 
-    return elegidos
+        nombre_topping = toppings_nombres[indice_restaurante][indice_producto][indice_topping]
+        precio_topping = toppings_precios[indice_restaurante][indice_producto][indice_topping]
+
+        toppings_elegidos.append(nombre_topping)
+        precios_elegidos.append(precio_topping)
+
+        respuesta = leer_respuesta("¿Desea agregar otro topping? s/n: ")
+
+    return toppings_elegidos, precios_elegidos
 
 
 # Permite seleccionar productos y armar el pedido completo
-def seleccionar_productos(restaurante):
+def seleccionar_productos(indice_restaurante):
     pedido = []
     seguir = "s"
 
     while seguir == "s":
-        print(f"\nMenú de {restaurante['nombre']}:")
+        print(f"\nMenú de {restaurantes[indice_restaurante]}:")
 
-        for i, (nombre, precio, toppings) in enumerate(restaurante["menu"], start=1):
-            print(f"{i}) {nombre} - ${precio}")
+        cantidad_productos = len(productos[indice_restaurante])
 
-        indice = leer_opcion("Seleccione un producto: ", len(restaurante["menu"]))
+        for i in range(cantidad_productos):
+            nombre = productos[indice_restaurante][i]
+            precio = precios[indice_restaurante][i]
+            print(f"{i + 1}) {nombre} - ${precio}")
 
-        # Se desarma la tupla del producto elegido
-        nombre, precio, toppings = restaurante["menu"][indice]
+        indice_producto = leer_opcion("Seleccione un producto: ", cantidad_productos)
 
-        pedido.append({
-            "producto": nombre,
-            "precio": precio,
-            "cantidad": leer_cantidad(),
-            "toppings": elegir_toppings(toppings)
-        })
+        nombre_producto = productos[indice_restaurante][indice_producto]
+        precio_producto = precios[indice_restaurante][indice_producto]
+        cantidad = leer_cantidad()
 
-        seguir = input("¿Desea agregar otro producto? s/n: ").lower()
+        toppings_elegidos, precios_toppings = elegir_toppings(indice_restaurante, indice_producto)
+
+        producto_pedido = [
+            nombre_producto,
+            precio_producto,
+            cantidad,
+            toppings_elegidos,
+            precios_toppings
+        ]
+
+        pedido.append(producto_pedido)
+
+        seguir = leer_respuesta("¿Desea agregar otro producto? s/n: ")
 
     return pedido
 #### Hasta aca el Tercer avance del proyecto
+
+
+# Calcula el total sumando precio base, toppings y cantidad
+def calcular_total(pedido):
+    total = 0
+
+    for item in pedido:
+        precio_producto = item[1]
+        cantidad = item[2]
+        precios_toppings = item[4]
+
+        total_toppings = 0
+
+        for precio in precios_toppings:
+            total_toppings = total_toppings + precio
+
+        subtotal = (precio_producto + total_toppings) * cantidad
+        total = total + subtotal
+
+    return total
+
+
+# Cuenta la cantidad total de productos comprados
+def contar_productos(pedido):
+    cantidad_total = 0
+
+    for item in pedido:
+        cantidad_total = cantidad_total + item[2]
+
+    return cantidad_total
+
+
+# Aplica descuento si la compra supera los 3 productos
+def aplicar_descuento(total, cantidad_productos):
+    if cantidad_productos > CANTIDAD_MINIMA_DESCUENTO:
+        descuento = total * PORCENTAJE_DESCUENTO
+    else:
+        descuento = 0
+
+    total_final = total - descuento
+    return descuento, total_final
+
+
+# Actualiza las estadísticas del restaurante elegido
+def registrar_venta(indice_restaurante, cantidad_productos, total_final):
+    pedidos_restaurante[indice_restaurante] = pedidos_restaurante[indice_restaurante] + 1
+    productos_restaurante[indice_restaurante] = productos_restaurante[indice_restaurante] + cantidad_productos
+    total_restaurante[indice_restaurante] = total_restaurante[indice_restaurante] + total_final
+
+
+# Guarda la venta realizada en ventas.txt
+def guardar_venta(restaurante, modalidad, cantidad_productos, total_final, descuento):
+    archivo = open(ARCHIVO_VENTAS, "a", encoding="utf-8")
+
+    archivo.write(f"\nFecha: {fecha_actual()}\n")
+    archivo.write(f"Restaurante: {restaurante}\n")
+    archivo.write(f"Modalidad: {modalidad}\n")
+    archivo.write(f"Productos vendidos: {cantidad_productos}\n")
+    archivo.write(f"Descuento aplicado: ${descuento}\n")
+    archivo.write(f"Total vendido: ${total_final}\n")
+    archivo.write("-----------------------------\n")
+
+    archivo.close()
+
+
+# Muestra el resumen del pedido realizado
+def mostrar_resumen(restaurante, modalidad, pedido, total, descuento, total_final):
+    print("\nResumen del pedido")
+    print(f"Restaurante: {restaurante}")
+    print(f"Modalidad: {modalidad}")
+
+    for item in pedido:
+        print(f"\nProducto: {item[0]}")
+        print(f"Cantidad: {item[2]}")
+
+        if len(item[3]) > 0:
+            print("Toppings:")
+
+            for i in range(len(item[3])):
+                print(f"- {item[3][i]}: ${item[4][i]}")
+        else:
+            print("Toppings: sin toppings")
+
+    print(f"\nTotal sin descuento: ${total}")
+    print(f"Descuento aplicado: ${descuento}")
+    print(f"Total final: ${total_final}")
+
+
+# Muestra las estadísticas acumuladas de todos los restaurantes
+def mostrar_estadisticas():
+    print("\nEstadísticas de ventas por restaurante")
+
+    for i in range(len(restaurantes)):
+        print(f"\nRestaurante: {restaurantes[i]}")
+        print(f"Pedidos realizados: {pedidos_restaurante[i]}")
+        print(f"Productos vendidos: {productos_restaurante[i]}")
+        print(f"Total vendido: ${total_restaurante[i]}")
+#### Hasta aca el Cuarto avance del proyecto
