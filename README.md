@@ -11,11 +11,9 @@
 Comisión: k1.3
 
 ## Descripción general del sistema
-
 GoKitchen es un sistema de gestión de pedidos de comida que permite realizar ventas desde distintos restaurantes, calcular importes, aplicar descuentos según la cantidad de productos, registrar las ventas y generar distintos reportes e informes.
 
 ## Instrucciones de ejecución
-
 1. Descargar el repositorio.
 2. Abrir el proyecto en Visual Studio Code.
 3. Ejecutar el archivo GoKitchen.py.
